@@ -22,7 +22,7 @@
 	<artifactId>pado-web</artifactId>
 	<packaging>war</packaging>
 	<name>pado-web</name>
-	<version>0.1.0</version>
+	<version>0.0.3</version>
 	<description>Pado web container</description>
 
 	<repositories>

@@ -4,8 +4,13 @@ Pado-web is a web container that provides the Pado RESTful API for invoking IBiz
 
 ## Installing pado-web
 - Download and install Pado following the instructions in the Pado [README.md](https://github.com/netcrest/pado/tree/develop/README.md) file.
-- Download and build pado-web as follows:
+- Download and build pado and pado-web as follows:
 ```
+git clone https://github.com/netcrest/pado.git
+git clone https://github.com/netcrest/pado-web.git
+cd pado
+mvn clean install -DskipTests
+cd ../pado-web
 mvn clean package exec:exec -DskipTests
 ```
 - Place the `target/pado-web-<version>.war` file in the app server's webapps directory. For example, for Tomcat, place it in `<tomcat-home>/webapps/`.
