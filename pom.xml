@@ -64,6 +64,11 @@
 			<version>${pado.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.netcrest.pado</groupId>
+			<artifactId>pado-test</artifactId>
+			<version>${pado.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
@@ -203,6 +208,7 @@
 									<include>pado-core-${pado.version}.jar</include>
 									<include>pado-gemfire-${pado.version}.jar</include>
 									<include>pado-rpc-biz-${pado.version}.jar</include>
+									<include>pado-test-${pado.version}.jar</include>
 									<include>gemfire-${gemfire.version}.jar</include>
 									<include>lucene-queryparser-${lucene.version}.jar</include>
 								</resource>

@@ -43,6 +43,7 @@
 		<jar href="slib/pado-biz.jar"/>
 		<jar href="slib/pado-biz-gemfire.jar"/>
 		<jar href="slib/pado-desktop.jar"/>
+		<jar href="slib/pado-test.jar"/>
 		<jar href="slib/swingx-all-1.6.3.jar"/>
 		<jar href="slib/swingx-beaninfo-1.6.3.jar"/>
 		<jar href="slib/naf/infocom.jar"/>
