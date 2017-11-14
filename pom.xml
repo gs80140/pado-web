@@ -83,28 +83,6 @@
 
 	<build>
 		<plugins>
-			<!-- Clean up the build directories -->
-			<!-- <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>clean-build</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<inherited>false</inherited>
-						<configuration>
-							<tasks>
-								<delete dir="target/build" />
-								<delete dir="target/pado-web-${project.version}" />
-							</tasks>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin> -->
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
