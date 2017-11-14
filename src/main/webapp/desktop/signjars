@@ -3,11 +3,45 @@
 STORE_PASSWORD=pado-web
 echo "password=$STORE_PASSWORD"
 
-if [ "$1" != "" ]; then
-   if [ -f lib/gemfire-$1 ]; then
-      mv lib/gemfire-$1.jar lib/gemfire.jar
+# parseFileName parses file names found in the lib directory
+# to drop the version postfix from the select files names.
+# arg1 fileName - file name
+# arg2 delimiterCount - delimiter count of postfix for determining the index number
+function parseFileName
+{
+   local FILE_NAME=$1	   
+   local DELIMITER_COUNT=$2	   
+   IFS='-'; vector=($FILE_NAME); unset IFS;   
+   let LAST_INDEX=${#vector[@]}-1
+   let FILE_HEAD_LAST_INDEX=LAST_INDEX-DELIMITER_COUNT
+   FILE_HEAD=
+   for (( i = 0; i <= ${FILE_HEAD_LAST_INDEX}; i++ ))
+   do
+      if [ $i == 0 ]; then
+         FILE_HEAD=${vector[$i]}
+      else 
+         FILE_HEAD=$FILE_HEAD-${vector[$i]}
+      fi
+   done
+
+   if [ "%FILE_HEAD%" != "" ]; then
+      mv -f $FILE_NAME $FILE_HEAD.jar
    fi
-fi
+}
+
+# Drop the version postfix from the pado jar file names.
+pushd lib > /dev/null 2>&1
+for file in pado-*.jar
+do
+   parseFileName $file 2
+done
+
+# Drop the version postif from the gemfire jar file names.
+for file in gemfire-*.jar
+do
+   parseFileName $file 1
+done
+popd > /dev/null 2>&1
 
 if [ ! -d slib/naf ]; then
   mkdir -p slib/naf
@@ -59,3 +93,4 @@ echo "sec.jar"
 jar cvf sec.jar security
 jarsigner -keystore pado-web.keystore -storepass $STORE_PASSWORD -tsa http://timestamp.digicert.com -signedjar ssec.jar sec.jar pado-web
 #jarsigner -keystore pado-web.keystore -storepass $STORE_PASSWORD -signedjar ssec.jar sec.jar pado-web > /dev/null 2>&1
+

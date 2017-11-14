@@ -22,7 +22,7 @@
 	<artifactId>pado-web</artifactId>
 	<packaging>war</packaging>
 	<name>pado-web</name>
-	<version>0.0.3</version>
+	<version>0.1.0</version>
 	<description>Pado web container</description>
 
 	<repositories>
@@ -179,7 +179,6 @@
 						</configuration>
 					</execution>
 
-
 					<!-- Copy desktop jars from target/dependency to build/lib -->
 					<execution>
 						<id>copy-desktop-jars</id>
@@ -220,7 +219,7 @@
 				<executions>
 					<execution>
 						<id>mkdir-slib</id>
-						<phase>generate-sources</phase>
+						<phase>prepare-package</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>
@@ -228,6 +227,9 @@
 						<configuration>
 							<tasks>
 								<mkdir dir="target/build/slib" />
+								<echo message="Setting executable perssmions on signjars" />
+								<chmod file="target/build/signjars" perm="755" />
+								<chmod file="target/build/signjars.bat" perm="755" />
 							</tasks>
 						</configuration>
 					</execution>
@@ -249,7 +251,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<executable>signjars</executable>
+					<executable>./signjars</executable>
 					<arguments>
 						<argument>
 							build
