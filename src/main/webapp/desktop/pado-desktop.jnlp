@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" 
+      href="pado-desktop.jnlp">
+    <information>
+        <title>Pado Desktop</title>
+        <vendor>Netcrest Technologies, LLC</vendor>
+        <homepage href="desktop/help-desktop.html"/>
+	    <description>PADO Desktop on Web</description>
+	    <description kind="short">PADO GUI tool for monitoring and controlling data grids</description>
+	    <icon href="../images/pado_64x64.jpg"/>
+	    <icon kind="splash" href="../images/pado_logo.jpg"/>
+        <offline-allowed/> 
+        <association mime-type="application-x/pado-desktop-file"  extensions="desktop"/> 
+        <shortcut online="true" install="true">
+	      <desktop/>
+	      <menu submenu="Pado"/>
+	    </shortcut>
+    </information>
+    <security>
+		<all-permissions/>
+	</security>
+
+    <resources>
+
+        <!-- Application Resources -->
+        <j2se version="1.7+"
+              href="http://java.sun.com/products/autodl/j2se"/>
+	 	<jar href="setc.jar"/>
+		<jar href="ssec.jar"/>
+ 		<jar href="slib/JHyperlink.jar"/>
+		<jar href="slib/activation.jar"/>
+		<jar href="slib/commons-codec-1.9.jar"/>
+		<jar href="slib/gemfire.jar"/>
+		<jar href="slib/antlr.jar"/>
+		<jar href="slib/gfsh-dependencies.jar"/>
+		<jar href="slib/log4j-api-2.1.jar"/>
+		<jar href="slib/log4j-core-2.1.jar"/>
+		<jar href="slib/lucene-queryparser-4.7.2.jar"/>
+		<jar href="slib/org-netbeans-swing-outline.jar"/>
+		<jar href="slib/pado-common.jar"/>
+		<jar href="slib/pado-core.jar"/>
+		<jar href="slib/pado-gemfire.jar"/>
+		<jar href="slib/pado-biz.jar"/>
+		<jar href="slib/pado-biz-gemfire.jar"/>
+		<jar href="slib/pado-desktop.jar"/>
+		<jar href="slib/swingx-all-1.6.3.jar"/>
+		<jar href="slib/swingx-beaninfo-1.6.3.jar"/>
+		<jar href="slib/naf/infocom.jar"/>
+		<jar href="slib/naf/javax.jar"/>
+		<jar href="slib/naf/jms1_1.jar"/>
+		<jar href="slib/naf/log4j.jar"/>
+		<jar href="slib/naf/misc.jar"/>
+		<jar href="slib/naf/naf.jar"/>
+		<jar href="slib/naf/quaqua.jar"/>
+		<jar href="slib/naf/substance.jar"/>
+		<jar href="slib/naf/sun.jar"/>
+		<jar href="slib/naf/xerces.jar"/>
+		<jar href="slib/naf/xml.jar"/>
+		<jar href="slib/naf/xml_sun.jar"/>
+
+		<!-- Add your app-specific jar files here. For example, your data (KeyType/JsonLite) and IBiz classes -->
+
+    </resources>
+
+    <application-desc
+         name="Pado Desktop"
+         main-class="com.netcrest.ui.desktop.Desktop">
+         <argument>-webStart</argument>
+     </application-desc>
+     <update check="background"/>
+</jnlp>
+

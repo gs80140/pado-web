@@ -1,0 +1,2 @@
+echo "password=pado-web"
+keytool -exportcert -keystore pado-web.keystore -alias pado-web -file pado-web.csr

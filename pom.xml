@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2013-2017 Netcrest Technologies, LLC. All rights reserved. 
+	Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+	use this file except in compliance with the License. You may obtain a copy 
+	of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<pado.version>0.4.1-B4</pado.version>
+		<lucene.version>4.7.2</lucene.version>
+		<gemfire.version>8.2.0</gemfire.version>
+	</properties>
+
+	<groupId>com.netcrest.pado</groupId>
+	<artifactId>pado-web</artifactId>
+	<packaging>war</packaging>
+	<name>pado-web</name>
+	<version>0.1.0</version>
+	<description>Pado web container</description>
+
+	<repositories>
+		<repository>
+			<id>gemfire-repository</id>
+			<name>Gemfire Repository</name>
+			<url>http://dist.gemstone.com/maven/release</url>
+		</repository>
+		<repository>
+			<id>freehep-releases</id>
+			<url>http://java.freehep.org/maven2/</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.netcrest.pado</groupId>
+			<artifactId>pado-common</artifactId>
+			<version>${pado.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.netcrest.pado</groupId>
+			<artifactId>pado-core</artifactId>
+			<version>${pado.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.netcrest.pado</groupId>
+			<artifactId>pado-biz</artifactId>
+			<version>${pado.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.netcrest.pado</groupId>
+			<artifactId>pado-biz-gemfire</artifactId>
+			<version>${pado.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.netcrest.pado</groupId>
+			<artifactId>pado-rpc-biz</artifactId>
+			<version>${pado.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- Clean up the build directories -->
+			<!-- <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>clean-build</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<tasks>
+								<delete dir="target/build" />
+								<delete dir="target/pado-web-${project.version}" />
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin> -->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<!-- Copy pado-*.jar to the target lib directory -->
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<!-- Copy license to build -->
+					<execution>
+						<id>copy-license</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/build</outputDirectory>
+							<resources>
+								<resource>
+									<directory>.</directory>
+									<include>LICENSE.txt</include>
+									<include>RELEASET_NOTES.txt</include>
+								</resource>
+								<resource>
+									<directory>license</directory>
+									<include>**</include>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					
+					<!-- Copy lib to build/lib -->
+					<execution>
+						<id>copy-lib</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/build/lib</outputDirectory>
+							<resources>
+								<resource>
+									<directory>lib</directory>
+									<include>**</include>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+
+					<!-- Copy desktop to build -->
+					<execution>
+						<id>copy-desktop</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/build</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/webapp/desktop</directory>
+									<include>**</include>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+
+
+					<!-- Copy desktop jars from target/dependency to build/lib -->
+					<execution>
+						<id>copy-desktop-jars</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/build/lib</outputDirectory>
+							<resources>
+								<resource>
+									<directory>target/dependency</directory>
+									<include>antlr4-runtime-4.5.2.jar</include>
+									<include>commons-codec-1.9.jar</include>
+									<include>log4j-api-2.1.jar</include>
+									<include>log4j-core-2.1.jar</include>
+									<include>swingx-all-1.6.5-1.jar</include>
+									<include>swingx-beaninfo-1.6.5-1.jar</include>
+									<include>pado-biz-${pado.version}.jar</include>
+									<include>pado-biz-gemfire-${pado.version}.jar</include>
+									<include>pado-common-${pado.version}.jar</include>
+									<include>pado-core-${pado.version}.jar</include>
+									<include>pado-gemfire-${pado.version}.jar</include>
+									<include>pado-rpc-biz-${pado.version}.jar</include>
+									<include>gemfire-${gemfire.version}.jar</include>
+									<include>lucene-queryparser-${lucene.version}.jar</include>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Make slib dir. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>mkdir-slib</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<tasks>
+								<mkdir dir="target/build/slib" />
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Sign jars into slib/ -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<id>sign-jars</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<executable>signjars</executable>
+					<arguments>
+						<argument>
+							build
+						</argument>
+					</arguments>
+					<workingDirectory>target/build</workingDirectory>
+				</configuration>
+			</plugin>
+
+			<!-- Include target/build/license in root,
+				 Include target/build/slib in desktop/slib,
+				 Include select lib files in WEB-INF/lib
+				  -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.2.0</version>
+				<!-- <executions> <execution> <id>id.package</id> <phase>package</phase> 
+					<goals> <goal>war</goal> </goals> </execution> </executions> -->
+				<configuration>
+					<webResources>
+					    <resource>
+							<directory>.</directory>
+							<targetPath>.</targetPath>
+							<include>LICENSE.txt</include>
+							<include>RELEASE_NOTES.txt</include>
+						</resource>
+						<resource>
+							<directory>license</directory>
+							<targetPath>license</targetPath>
+							<include>**</include>
+						</resource>
+						<resource>
+							<directory>target/build/slib</directory>
+							<targetPath>desktop/slib</targetPath>
+						</resource>
+						<resource>
+							<directory>lib</directory>
+							<targetPath>WEB-INF/lib</targetPath>
+							<include>antlr.jar</include>
+							<include>gfsh-dependencies.jar</include>
+						</resource>
+					</webResources>
+					<packagingExcludes>
+						WEB-INF/lib/ant-*.jar,
+						WEB-INF/lib/antlr-2*.jar,
+						WEB-INF/lib/antlr4-*.jar,
+						WEB-INF/lib/commons-csv-*.jar,
+						WEB-INF/lib/commons-io-*.jar,
+						WEB-INF/lib/commons-lang*.jar,
+						WEB-INF/lib/dom4j-*.jar,
+						WEB-INF/lib/gemfire-dqueue-*.jar,
+						WEB-INF/lib/guava-*.jar,
+						WEB-INF/lib/hamcrest-*.jar,
+						WEB-INF/lib/jackson-*.jar,
+						WEB-INF/lib/javassist-*.jar,
+						WEB-INF/lib/javax.servlet-*.jar,
+						WEB-INF/lib/jnlp-*.jar,
+						WEB-INF/lib/joda-time-*.jar,
+						WEB-INF/lib/junit-*.jar,
+						WEB-INF/lib/lucene-analyzers-*.jar,
+						WEB-INF/lib/lucene-codecs-*.jar,
+						WEB-INF/lib/lucene-core-*.jar,
+						WEB-INF/lib/lucene-queries-*.jar,
+						WEB-INF/lib/lucene-sandbox-*.jar,
+						WEB-INF/lib/org.eclipse*.jar,
+						WEB-INF/lib/reflections-*.jar,
+						WEB-INF/lib/slf4j-*.jar,
+						WEB-INF/lib/swingx-*.jar,
+						WEB-INF/lib/univocity-*.jar,
+						WEB-INF/lib/xml-apis-*.jar,
+						WEB-INF/lib/xom-*.jar
+					</packagingExcludes>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/java</directory>
+				<includes>
+					<include>**/*.txt</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-antrun-plugin
+										</artifactId>
+										<versionRange>
+											[1.3,)
+										</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

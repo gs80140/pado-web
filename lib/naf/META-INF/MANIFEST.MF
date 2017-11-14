@@ -1,0 +1,15 @@
+Manifest-Version: 1.0.0-B8
+Ant-Version: Apache Ant 1.9.6
+Created-By: dpark
+Permissions: all-permissions
+Main-Class: com.netcrest.naf.NafVersion
+
+Name: naf
+Specification-Title: naf
+Specification-Version: 1.0.0-B8 08-28-2015 09:55:38 AM
+Specification-Vendor: Netcrest Technologies, LLC
+Implementation-Title: naf
+Implementation-Version: 1.0.0-B8 08-28-2015 09:55:38 AM
+Implementation-Vendor: Netcrest Technologies, LLC
+Sealed: true
+

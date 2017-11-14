@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<script type="text/javascript"
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+	executeQuery = function executeQuery(form) {
+		var resultDiv = $("#resultDivContainer");
+		var token = getQueryVar('token');
+		/* http://localhost:8080/pado-web/pado?token=be07c696-0055-45df-91a5-b17f21304b0a&query=master_ucn?a*&validat=20141119&asof=201411191539&cursor=next&batch=100 */
+		$
+				.ajax({
+					url : "pado",
+					type : "POST",
+					data : {
+						token : token,
+						query : form.query.value
+					},
+					dataType : "json",
+					success : function(result) {
+						var jsonStr = JSON.stringify(result);
+						var json = JSON.parse(jsonStr);
+
+						switch (result) {
+						case true:
+							processResponse(result);
+							break;
+						default:
+							resultDiv.html(result);
+						}
+						form.rest.value = window.location.protocol + "//"
+								+ window.location.host
+								+ "/pado-web/pado?token=" + token + "&query="
+								+ form.query.value + "&cursor=next";
+						if (jsonStr == null) {
+							form.results.value = "";
+						} else {
+							form.results.value = jsonStr;
+						}
+					},
+					error : function(xhr, ajaxOptions, thrownError) {
+						alert(xhr.status);
+						alert(thrownError);
+					}
+				});
+	};
+	
+	ibiz = function ibiz() {
+		var token = getQueryVar('token');
+		window.location.href="ibiz.html?token=" + token;
+	};
+
+	function getQueryVar(varName) {
+		// Grab and unescape the query string - appending an '&' keeps the RegExp simple
+		// for the sake of this example.
+		var queryStr = unescape(window.location.search) + '&';
+
+		// Dynamic replacement RegExp
+		var regex = new RegExp('.*?[&\\?]' + varName + '=(.*?)&.*');
+
+		// Apply RegExp to the query string
+		val = queryStr.replace(regex, "$1");
+
+		// If the string is the same, we didn't find a match - return false
+		return val == queryStr ? false : val;
+	};
+
+	function getArray(str) {
+		var retval = str.replace(/[\[\]']+/g, "").split(",").map(function(v) {
+			var token = v.replace(/^\s\s*/g, '').replace(/\s\s*$/g, '');
+			if (token == "null") {
+				token = null;
+			}
+			return token;
+		});
+		if (retval.length == 1 && retval[0].length == 0) {
+			return null;
+		}
+		return retval;
+	}
+</script>
+</head>
+<body>
+	<div id="resultDivContainer"></div>
+	<h2>Query</h2>
+	Enter PQL query statement, e.g., "path?some-data-to-search". Clicking the "Query" button
+	repeatedly will advance the result set to the next pages. You can also
+	copy/paste the resultant RESTful API into the browser URL input to
+	execute the query. See <a href="doc/api/index.html" target="pado-api">Pado-web API</a> for RESTful parameters.
+	<p><i>This version supports only temporal queries.</i></p>
+	<form action="" method="post" method="query">
+		<table cellpadding="10">
+	        <tbody >
+	        	<tr>
+	        	<td><a href="doc/api/index.html" target="pado-api">Pado-web API</a></td>
+	        	<td><a href="doc/api/pado-api/index.html" target="pado-api">Pado API</a></td>
+	        	<td><input type="button" NAME="button" Value="IBiz" onClick="ibiz()"></input></td>
+	        	</tr>
+	        </tbody>
+	    </table>
+    </form>
+	<form action="" method="post" method="executeQuery">
+		<table>
+			<tbody>
+				<tr>
+					<td><label for="query">Query:</label></td>
+					<td><textarea id="query" rows="2" cols="75"></textarea></td>
+					<td><input type="button" NAME="button" Value="Query"
+						onClick="executeQuery(this.form)"></td>
+				</tr>
+				<tr>
+					<td><label for="rest">RESTful:</label></td>
+					<td><textarea id="rest" readonly="readonly" rows="2"
+							cols="75"></textarea></td>
+				</tr>
+			</tbody>
+		</table>
+		<label for="results">Results:</label>
+		<br></br>
+		<textarea id="results" readonly="readonly" rows="20" cols="100"></textarea>
+	</form>
+</body>
+</html>

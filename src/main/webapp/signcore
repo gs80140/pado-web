@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#
+# List the core jar files here. 
+# The path must be relative to the desktop directory
+#
+CORE_FILES="lib/naf/naf.jar etc.jar sec.jar lib/pado-biz-gemfire.jar lib/pado-common.jar lib/pado-desktop.jar lib/pado-biz.jar lib/pado-core.jar lib/pado-gemfire.jar lib/pado-rpc-biz.jar"
+STORE_PASSWORD=pado-web
+echo password=$STORE_PASSWORD
+
+#
+# Create jars etc.jar & sec.jar
+#
+pushd desktop > /dev/null 2>&1
+# etc.jar
+#jar cvfm etc.jar MANIFEST.MF etc
+jar cvf etc.jar etc
+# sec.jar
+#jar cvfm sec.jar MANIFEST.MF security
+jar cvf sec.jar security
+popd > /dev/null 2>&1
+
+for i in $CORE_FILES; do
+   echo "$i"
+#   jarsigner -keystore desktop/pado-web.keystore -storepass $STORE_PASSWORD -tsa http://timestamp.digicert.com -signedjar desktop/s$i desktop/$i pado-web
+   jarsigner -keystore desktop/pado-web.keystore -storepass $STORE_PASSWORD -signedjar desktop/s$i desktop/$i pado-web > /dev/null 2>&1
+done

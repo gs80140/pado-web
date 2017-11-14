@@ -1,0 +1,192 @@
+<!ELEMENT NetcrestFramework  (MessageParser?,Naflets?,Desktop?,ConnectionPools?,
+               PropertiesList?,DataObjects?) >
+
+<!ATTLIST NetcrestFramework
+               Name  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT MessageParser  (Schema+) >
+
+<!ATTLIST MessageParser
+               Name  CDATA    #IMPLIED 
+               DefaultSchemaName  CDATA    #REQUIRED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT Naflets  (Naflet+) >
+
+<!ATTLIST Naflets
+               Name  CDATA    #IMPLIED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT Desktop  (Preferences) >
+
+<!ATTLIST Desktop
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT ConnectionPools  (JDBCPool*,MessagePool*)* >
+
+<!ATTLIST ConnectionPools
+               Name  CDATA    #IMPLIED 
+               MessagePoolName  CDATA    #IMPLIED 
+               JDBCPoolName  CDATA    #IMPLIED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT PropertiesList  (Properties*) >
+
+<!ATTLIST PropertiesList
+               Name  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT DataObjects  (DataObject*) >
+
+<!ATTLIST DataObjects
+               Name  CDATA    #IMPLIED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT Schema  (Messages*,BusinessRules?,Properties?)? >
+
+<!ATTLIST Schema
+               Name  CDATA    #REQUIRED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT Naflet  (Properties?) >
+
+<!ATTLIST Naflet
+               Name  CDATA    #REQUIRED 
+               ClassName  CDATA    #REQUIRED 
+               Enabled (True | False)   #IMPLIED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT Preferences   EMPTY  >
+
+<!ATTLIST Preferences
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT JDBCPool  (Properties?) >
+
+<!ATTLIST JDBCPool
+               JDBCPoolName  CDATA    #REQUIRED 
+               URL  CDATA    #REQUIRED 
+               Driver  CDATA    #REQUIRED 
+               UserName  CDATA    #REQUIRED 
+               Password  CDATA    #REQUIRED 
+               Server  CDATA    #IMPLIED 
+               InitialCapacity  CDATA    #IMPLIED 
+               MaximumCapacity  CDATA    #IMPLIED 
+               CapcityIncrement  CDATA    #IMPLIED 
+               AllowShrinking (True | False)   #IMPLIED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED 
+               Database  CDATA    #IMPLIED  >
+
+<!ATTLIST MessagePool
+               MessagePoolName  CDATA    #REQUIRED 
+               MRL  CDATA    #IMPLIED 
+               InitialCapacity  CDATA    #IMPLIED 
+               MaximumCapacity  CDATA    #IMPLIED 
+               CapacityIncrement  CDATA    #IMPLIED 
+               AllowShrinking (True | False)   #IMPLIED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT Properties  (Property*) >
+
+<!ATTLIST Properties
+               Name  CDATA    #REQUIRED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT DataObject  (Field*) >
+
+<!ATTLIST DataObject
+               Name  CDATA    #REQUIRED 
+               ClassName  CDATA    #REQUIRED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT Messages  (Message*,dbMessage*,Properties?) >
+
+<!ATTLIST Messages
+               Name  CDATA    #IMPLIED 
+               MessagePoolName  CDATA    #IMPLIED 
+               JDBCPoolName  CDATA    #IMPLIED 
+               MRL  CDATA    #IMPLIED 
+               Adapter  CDATA    #IMPLIED 
+               ConversionType (NetcrestXMapMessage | XMLNode | JMSMessage | 
+               DataObject | NoConversion)   #REQUIRED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT BusinessRules  (RuleChain | RuleClass | Properties?)+ >
+
+<!ATTLIST BusinessRules
+               Name  CDATA    #REQUIRED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ATTLIST Property
+               Name  CDATA    #REQUIRED 
+               Value  CDATA    #REQUIRED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT Field  (Field*) >
+
+<!ATTLIST Field
+               Name  CDATA    #REQUIRED 
+               DOName  CDATA    #REQUIRED 
+               Comment  CDATA    #IMPLIED  >
+
+<!--This is a message comment.-->
+<!ELEMENT Message  (Properties?,Field*)? >
+
+<!ATTLIST Message
+               ContextName  CDATA    #REQUIRED 
+               MessagePoolName  CDATA    #IMPLIED 
+               Topic  CDATA    #IMPLIED 
+               Attributes  CDATA    #IMPLIED 
+               MRL  CDATA    #IMPLIED 
+               Adapter  CDATA    #IMPLIED 
+               ConversionType (NetcrestXMapMessage | XMLNode | JMSMessage | 
+               NoConversion | DataObject)   #REQUIRED 
+               DataObjectName  CDATA    #IMPLIED 
+               MapFields (True | False)  "False"
+               ReplyContextName  CDATA    #IMPLIED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT dbMessage  (Field*,Properties?) >
+
+<!ATTLIST dbMessage
+               ContextName  CDATA    #REQUIRED 
+               JDBCPoolName  CDATA    #IMPLIED 
+               Adapter  CDATA    #IMPLIED 
+               SQL  CDATA    #REQUIRED 
+               ConversionType (NetcrestXMapMessage | XMLNode | JMSMessage | 
+               DataObject | NoConversion)   #REQUIRED 
+               DataObjectName  CDATA    #IMPLIED 
+               MapFields (True | False)  "False"
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT RuleChain  (Property*) >
+
+<!ATTLIST RuleChain
+               Name  CDATA    #REQUIRED 
+               RuleNames  CDATA    #REQUIRED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+
+<!ELEMENT RuleClass  (Property*) >
+
+<!ATTLIST RuleClass
+               Name  CDATA    #REQUIRED 
+               ClassName  CDATA    #REQUIRED 
+               MessageContextNames  CDATA    #REQUIRED 
+               PropertiesName  CDATA    #IMPLIED 
+               Comment  CDATA    #IMPLIED  >
+

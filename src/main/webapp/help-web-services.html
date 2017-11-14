@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PADO Web Services Help</title>
+</head>
+
+<body>
+<h1>PADO Web Services</h1>
+	PADO web services translate JSON requests to IBiz method calls which
+	may return JSON objects as responses. There are four types of JSON
+	requests supported by PADO: "login", "logout", "query", "ibiz". Note
+	that all properties listed below are case sensitive.
+	<p>
+	<h2>Login</h2>
+	<h3>Request:</h3>
+	<ul>
+		<li>"method" - "login".</li>
+		<li>"appid" - App ID</li>
+		<li>"username" - User name</li>
+		<li>"password" - Password</li>
+	</ul>
+	<h3>Response:</h3>
+	<ul>
+		<li>"token" - Session token. Set upon successful login.</li>
+		<li>"status" - Response status code. 0 if success.</li>
+		<li>"message" - Response message. Used as status message.</li>
+	</ul>
+	<h2>Logout</h2>
+	<h3>Request:</h3>
+	<ul>
+		<li>"token" - Session token.</li>
+		<li>"method" - "logout"
+	</ul>
+	<h3>Response:</h3>
+	<ul>
+		<li>"token" - Session token.</li>
+		<li>"status" - Response status code. 0 if success.</li>
+		<li>"message" - Response message. Used as status message.</li>
+	</ul>
+	<h2>Query</h2>
+	<h3>Request:</h3>
+	<ul>
+		<li>"query" - Pado Query Language (PQL) string</li>
+		<li>"validat" - Valid-at time in date format "yyyyMMddHHmmssSSS"</li>
+		<li>"asof" - As-of time in date format of "yyyyMMddHHmmssSSS"</li>
+		<li>"batch" - Streamed batch size. Default: 100</li>
+		<li>"ascend" - Ascending order flag. true to ascend, false to
+			descend. Default: true</li>
+		<li>"orderby" - Order-by field name</li>
+		<li>"refresh" - true to refresh L2 result set. Default: false</li>
+		<li>"cursor" - "next" to go to the next page (batch) of the
+			result set. "prev" to go the previous page, a numeric value to move
+			the cursor to the result index position. If the result set is not
+			available then the query is executed and the cursor is positioned at
+			beginning of the result set.</li>
+		<li>"token" - Session token obtained upon successful login</li>
+	</ul>
+	<h3>Response:</h3>
+	<ul>
+		<li>"size" - Size of the returned result set</li>
+		<li>"total" - Total size of the result set</li>
+		<li>"cursor" - Current cursor position</li>
+		<li>"token" - Session token.</li>
+		<li>"status" - Response status code. 0 if success.</li>
+		<li>"message" - Response message. Used as status message.</li>
+		<li>"result" - IBiz method returned value.</li>
+	</ul>
+	<h3>Examples</h3>
+	<ul>
+		<li>http://localhost:8080/pado-web/pado?token=be07c696-0055-45df-91a5-b17f21304b0a&query=master_ucn?abington</li>
+		<li>http://localhost:8080/pado-web/pado?token=be07c696-0055-45df-91a5-b17f21304b0a&query=master_ucn?abington&refresh=true</li>
+		<li>http://localhost:8080/pado-web/pado?token=be07c696-0055-45df-91a5-b17f21304b0a&query=master_ucn?abington&validat=20141119&asof=201411191539&cursor=next&batch=100</li>
+	</ul>
+	<h2>IBiz</h2>
+	<h3>Request:</h3>
+	<ul>
+		<li>"ibiz" - Fully-qualifying IBiz class name</li>
+		<li>"cargs[]" - IBiz constructor arguments in JsonArray</li>
+		<li>"method" - IBiz method name. Case sensitive</li>
+		<li>"args[]" - Method arguments in JsonArray</li>
+		<li>"token" - Session token obtained upon successful login</li>
+	</ul>
+	<h3>Response:</h3>
+	<ul>
+		<li>"token" - Session token.</li>
+		<li>"status" - Response status code. 0 if success.</li>
+		<li>"message" - Response message. Used as status message.</li>
+		<li>"result" - IBiz method returned value.</li>
+	</ul>
+</body>
+
+</html>

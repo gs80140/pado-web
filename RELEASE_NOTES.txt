@@ -1,0 +1,127 @@
+Pado Web
+========
+
+©2013-2017 Netcrest Technologies, LLC. All rights reserved.
+
+Release: Version 0.0.3
+Release Date: 11/13/2017
+
+- Mavenized the build and deposited in GitHub.
+- The build number is no longer supported.
+*************************************************************************
+
+Release: Version 0.0.2-B3
+Release Date: 06/17/2016
+
+- Added preliminary support virtual paths. This version requires Pado v0.4.1-B1 or above.
+*************************************************************************
+
+Release: Version 0.0.2-B2
+Release Date: 05/03/2016
+
+- Added support for limit in desktop. This version requires Pado v0.4.0-B4 or above.
+*************************************************************************
+
+Release: Version 0.0.2-B1
+Release Date: 12/18/2015
+
+- Included support for Pado v0.4.0-B2 (GitHub)
+*************************************************************************
+
+Release: Version 0.0.1-B14
+Release Date: 10/23/2015
+
+- Fixed the activation.jar download problem.
+*************************************************************************
+
+Release: Version 0.0.1-B13
+Release Date: 10/18/2015
+
+- Fixed a bug that prevented no-arg IBiz method invocations.
+- Added support for the "cache" parameter for the ibiz web service for caching IBiz instances per login session.
+*************************************************************************
+
+Release: Version 0.0.1-B12
+Release Date: 10/11/2015
+
+- Replaced locator/login settings in web.xml with etc/client/pado.properties
+*************************************************************************
+
+Release: Version 0.0.1-B11
+Release Date: 08/28/2015
+
+- Added support for GemFire SSL over JNLP.
+*************************************************************************
+
+Release: Version 0.0.1-B10
+Release Date: 06/24/2015
+
+- Added query page for executing temporal queries.
+- Added all primitives and String support for IBiz RESTful API.
+
+*************************************************************************
+
+Release: Version 0.0.1-B9
+Release Date: 04/07/2015
+
+- Updated with pado_0.2.0-B2.
+
+*************************************************************************
+
+Release: Version 0.0.1-B8
+Release Date: 03/15/2015
+
+- Updated with pado_0.1.0-B12.
+
+*************************************************************************
+
+Release: Version 0.0.1-B7
+Release Date: 03/03/2015
+
+- Updated Pado method name changes. No functional or operational changes.
+
+*************************************************************************
+
+Release: Version 0.0.1-B6
+Release Date: 02/09/2015
+
+- Added a workaround to a Java 8 Swing bug caused by the JComponent serial ID change.
+- Removed unnecessary jar files.
+
+*************************************************************************
+
+Release: Version 0.0.1-B5
+Release Date: 12/30/2014
+
+- Added support for launching Pado Desktop via JNLP.
+
+*************************************************************************
+
+Release: Version 0.0.1-B4
+Release Date: 12/07/2014
+
+- Included the latest Pado jars (Pado 0.1.0-B5).
+
+*************************************************************************
+
+Release: Version 0.0.1-B3
+Release Date: 11/19/2014
+
+- Added the "query" command for executing PQL on temporal data.
+
+*************************************************************************
+
+Release: Version 0.0.1-B2
+Release Date: 09/29/2014
+
+- Synchronized with the latest Pado library files.
+
+*************************************************************************
+
+Release: Version 0.0.1-B1
+Release Date: 09/23/2014
+
+- Initial release.
+- Includes IGridMapBiz.put() and get() JavaScript examples.
+
+*************************************************************************

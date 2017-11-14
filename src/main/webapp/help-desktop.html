@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pado Desktop Help</title>
+</head>
+
+<body>
+<h1>Pado Desktop</h1>
+	PADO Desktop on Web is launched by JNLP. With the proper security
+	settings, JNLP launched applications can run just like any stand-alone
+	applications with full access to the local file system and network.
+	PADO Desktop on Web is configured as such and has the same look and
+	feel of the stand-alone PADO Desktop.
+	<p>
+	<h2>Launching PADO Desktop for the First Time</h2>
+	The following steps must be taken before you can successfully launch
+	PADO Desktop:
+	<ol>
+		<li>Download and save the self-signed certificate in your local
+			file system by clicking here: <a href="desktop/pado-web.csr">Netcrest
+				Trusted Certificate</a>
+		</li>
+		<li>Import the self-signed security certificate from Java Control
+			Panel</li>
+		<ul>
+			<li>Open Java Control Panel. On Windows, select "Java" in
+				Control Panel. On Mac, select "Java" in System Preferences.</li>
+			<li>Select the "Security" tab.</li>
+			<li>Select the "Manage Certificates..." button.</li>
+			<li>Select "Signer CA" from the combobox.</li>
+			<li>Select the "Import" button.</li>
+			<li>Import the downloaded certificate.</li>
+		</ul>
+		<li>Launch PADO Desktop by clicking here: <a
+			href="javascript:deployJava.launchWebStartApplication('desktop/pado-desktop.jnlp');">Launch
+				Pado Desktop</a></li>
+	</ol>
+	<p>
+	<h2>Desktop Login</h2>
+	PADO requires you to login with proper credentials before you can
+	access the grids. The login window lists the available grid
+	environments in the "Env" combobox. The "_USER" environment is for you
+	to enter locators of your choice in the "Locators" text field. The
+	other environments listed in the combobox are pre-configured for you
+	and their locators cannot be changed.
+	<h2>Desktop Template</h2>
+	When you launch PADO Desktop for the first time, you may see a blank
+	desktop. You can start laying out the screen by splitting a worksheet
+	into "quads" and dropping components from the Bean Bar into the empty
+	quads. An easier way is to open the pre-built template that has most of
+	the essential components to monitor and control the PADO grids as
+	follows:
+	<ul>
+		<li>From the menubar, <i>Select File/Open Template</i></li>
+	</ul>
+	<h2>Reinstalling PADO Desktop</h2>
+	At times, JNLP may not launch PADO Desktop due to the staled resources.
+	You can reinstall PADO Desktop by deleting the Java Cache as follows:
+	<ul>
+		<li>Open Java Control Panel - On Windows, this is found in
+			Control Panel. On Mac, this is found in System Preferences.</li>
+		<li>From the "General tab, select "Settings..."</li>
+		<li>From the "Temporary Files Settings" window, select "Delete
+			Files..."</li>
+		<li>To reinstall, select "Installed Applications and Applets" and
+			then the "OK" button.</li>
+	</ul>
+
+	<script src="https://www.java.com/js/deployJava.js"></script>
+</body>
+
+</html>

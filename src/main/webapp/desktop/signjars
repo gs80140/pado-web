@@ -1,0 +1,61 @@
+#!/bin/bash
+
+STORE_PASSWORD=pado-web
+echo "password=$STORE_PASSWORD"
+
+if [ "$1" != "" ]; then
+   if [ -f lib/gemfire-$1 ]; then
+      mv lib/gemfire-$1.jar lib/gemfire.jar
+   fi
+fi
+
+if [ ! -d slib/naf ]; then
+  mkdir -p slib/naf
+fi
+if [ ! -d slib/app ]; then
+  mkdir -p slib/app
+fi
+
+# lib/*.jar
+if [ -d lib ]; then
+   JAR_FILES=`ls lib/*.jar` > /dev/null 2>&1
+   for i in $JAR_FILES; do
+      echo "$i"
+      jarsigner -keystore pado-web.keystore -storepass $STORE_PASSWORD -tsa http://timestamp.digicert.com -signedjar s$i $i pado-web
+      #jarsigner -keystore pado-web.keystore -storepass $STORE_PASSWORD -signedjar s$i $i pado-web > /dev/null 2>&1
+   done
+fi
+
+# lib/naf/*.jar
+if [ -d lib/naf ]; then
+   JAR_FILES=`ls lib/naf/*.jar` > /dev/null 2>&1
+   for i in $JAR_FILES; do
+      echo "$i"
+      jarsigner -keystore pado-web.keystore -storepass $STORE_PASSWORD -tsa http://timestamp.digicert.com -signedjar s$i $i pado-web
+      #jarsigner -keystore pado-web.keystore -storepass $STORE_PASSWORD -signedjar s$i $i pado-web > /dev/null 2>&1
+   done
+fi
+
+# lib/app/*.jar
+if [ -d lib/app ]; then
+   JAR_FILES=`ls lib/app/*.jar` > /dev/null 2>&1
+   for i in $JAR_FILES; do
+      echo "$i"
+      jarsigner -keystore pado-web.keystore -storepass $STORE_PASSWORD -tsa http://timestamp.digicert.com -signedjar s$i $i pado-web
+      #jarsigner -keystore pado-web.keystore -storepass $STORE_PASSWORD -signedjar s$i $i pado-web > /dev/null 2>&1
+   done
+fi
+
+# etc.jar
+echo "etc.jar"
+#jar cvfm etc.jar MANIFEST.MF etc
+jar cvf etc.jar etc
+jarsigner -keystore pado-web.keystore -storepass $STORE_PASSWORD -tsa http://timestamp.digicert.com -signedjar setc.jar etc.jar pado-web
+#jarsigner -keystore pado-web.keystore -storepass $STORE_PASSWORD -signedjar setc.jar etc.jar pado-web > /dev/null 2>&1
+
+# sec.jar
+echo "sec.jar"
+#jar cvfm sec.jar MANIFEST.MF security
+jar cvf sec.jar security
+jarsigner -keystore pado-web.keystore -storepass $STORE_PASSWORD -tsa http://timestamp.digicert.com -signedjar ssec.jar sec.jar pado-web
+#jarsigner -keystore pado-web.keystore -storepass $STORE_PASSWORD -signedjar ssec.jar sec.jar pado-web > /dev/null 2>&1

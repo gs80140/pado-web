@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<script type="text/javascript"
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+	pado = function pado(form) {
+		var resultDiv = $("#resultDivContainer");
+
+		$.ajax({
+			url : "pado",
+			type : "POST",
+			data : {
+				ibiz : "Pado",
+				method : "login",
+				appid : form.appId.value,
+				username : form.userName.value,
+				password : form.password.value
+			},
+
+			dataType : "json",
+			success : function(result) {
+				/* var jsonObj = JSON.parse(result); */
+				var jsonStr = JSON.stringify(result);
+				var json = JSON.parse(jsonStr);
+				var status = json.status;
+				var token = json.token;
+				var message = json.message;
+				var status = json.status;
+
+				if (status < 0) {
+					alert(message);
+				} else {
+					document.body.innerHTML = jsonStr;
+					switch (result) {
+					case true:
+						processResponse(result);
+						break;
+					default:
+						resultDiv.html(result);
+					}
+					window.location.href = "ibiz.html?token=" + token;
+				}
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+				alert("Login error! " + xhr.status + " " + thrownError);
+			/*	alert(xhr.status);
+				alert(thrownError); */
+			}
+		});
+	};
+</script>
+</head>
+<body>
+
+	<h1>My PADO Login</h1>
+
+	<div id="resultDivContainer"></div>
+
+	<form action="" method="post" method="put">
+		<table>
+			<tbody>
+				<tr>
+					<td><label for="appId">App ID:</label></td>
+					<td><input id="appId" type="text" value="sys"></td>
+				</tr>
+				<tr>
+					<td><label for="userName">User Name:</label></td>
+					<td><input id="userName" type="text" value="test1"></td>
+				</tr>
+				<tr>
+					<td><label for="password">Password:</label></td>
+					<td><input id="password" type="password"></td>
+					<td><input type="button" NAME="button" Value="Login"
+						onClick="pado(this.form)"></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+
+</body>
+</html>

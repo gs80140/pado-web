@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<script type="text/javascript"
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+	invoke = function invoke(form) {
+		var resultDiv = $("#resultDivContainer");
+		var token = getQueryVar('token');
+		var cargs = form.cargs.value;
+		var args = form.args.value;
+		
+		if (cargs != null) {
+			cargs = cargs.trim();
+			   // Assume json for args that are enclosed in {}.
+			   if (cargs.startsWith("{") && cargs.endsWith("}")) {
+			   } else {
+				   cargs = getArray(cargs);
+			   }
+			}
+		if (args != null) {
+		   args = args.trim();
+		   // Assume json for args that are enclosed in {}.
+		   if (args.startsWith("{") && args.endsWith("}")) {
+		   } else {
+		      args = getArray(args);
+		   }
+		}
+	
+		$.ajax({
+			url : "pado",
+			type : "POST",
+	 		data : {
+	 			token: token,
+	 			cache: form.cache.value,
+				ibiz : form.ibiz.value,
+				method : form.method.value,
+				cargs : cargs == null ? undefined: cargs,
+				args : args == null ? undefined : args
+			}, 
+			dataType : "json",
+			success : function(result) {
+				var jsonStr = JSON.stringify(result);
+				var json = JSON.parse(jsonStr);
+				var status = json.status;
+				var token = json.token;
+				var message = json.message;
+				var status = json.status;
+				var cache = form.cache.value;
+				
+				if (status < 0) {
+					alert(message);
+				} else {
+					switch (result) {
+					case true:
+						processResponse(result);
+						break;
+					default:
+						resultDiv.html(result);
+					}
+				}
+				var restStr = window.location.protocol + "//"
+								+ window.location.host
+								+ "/pado-web/pado?token=" + token 
+								+ "&ibiz="+ form.ibiz.value
+								+ "&method=" + form.method.value;
+				
+				if (cargs != null) {
+					restStr +=  "&cargs[]=" + encodeURIComponent(cargs);
+				}
+				if (args != null) {
+					restStr +=  "&args[]=" + encodeURIComponent(args);
+				}
+				if (cache != null && cache.toLowerCase() === 'true') {
+					restStr +=  "&cache=" + cache;
+				} 
+
+								
+				form.rest.value = restStr;
+				form.value.value = JSON.stringify(json);
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+				alert(xhr.status);
+				alert(thrownError);
+			}
+		});
+	};
+	
+	query = function query() {
+		var token = getQueryVar('token');
+		window.location.href="query.html?token=" + token;
+	};
+	
+	clearResults = function clearResults(form) {
+		form.rest.value = "";
+		form.value.value = "";
+	};
+	
+	function getQueryVar(varName){
+	    // Grab and unescape the query string - appending an '&' keeps the RegExp simple
+	    // for the sake of this example.
+	    var queryStr = unescape(window.location.search) + '&';
+
+	    // Dynamic replacement RegExp
+	    var regex = new RegExp('.*?[&\\?]' + varName + '=(.*?)&.*');
+
+	    // Apply RegExp to the query string
+	    val = queryStr.replace(regex, "$1");
+
+	    // If the string is the same, we didn't find a match - return false
+	    return val == queryStr ? false : val;
+	};
+	
+	function getArray(str){
+	  var retval = str
+	         .replace(/[\[\]']+/g,"")
+	         .split(",")
+	         .map(function(v){ 
+	           var token = v.replace(/^\s\s*/g, '').replace(/\s\s*$/g, '');
+	           if (token == "null") {
+	        	   token = null;
+	           }
+	           return token;
+	         });
+	  if (retval.length == 1 && retval[0].length == 0) {
+		  return null;
+	  }
+	  return retval;
+	}
+</script>
+</head>
+<body>
+	<h2>IBiz</h2>	 
+	<div id="resultDivContainer"></div>
+	This page demonstrates IBiz method invocations. Please follow the instructions below to invoke IBiz methods.
+	<ul>
+	<li>
+	Enter fully-qualified IBiz class name along with optional comma-separated argument types enclosed in parentheses, i.e., com.netcrest.pado.biz.IGridMapBiz(string).
+	</li>
+	<li>
+	Enter a method name along with optional comma-separated argument types enclosed in parentheses, e.g., put(string, string).
+	</li>
+	<li>Enter IBiz constructor arguments, e.g., test, or a single JSON object.</li>
+	<li>Enter method arguments separated by commas, e.g. key1, value1, or a single JSON object.</li>
+	<li>Click on the "Invoke" button to invoke the method. The corresponding RESTful API call will be shown in the "RESTful" text box
+	and the results will be shown in the "Returned Value" text box.</li>
+	</ul>
+	If argument types are not specified for the constructor and/or method, their types are automatically determined by the server.
+	Argument types are optional but maybe required for overloaded methods that have the same number of arguments in order to avoid ambiguity.
+	<form action="" method="post" method="query">
+		<table cellpadding="10">
+	        <tbody >
+	        	<tr>
+	        	<td><a href="doc/api/index.html" target="pado-api">Pado-web API</a></td>
+	        	<td><a href="doc/api/pado-api/index.html" target="pado-api">Pado API</a></td>
+	      		<td><input id=btn1" type="button" NAME="button" Value="Query" onClick="query()"></input></td>
+	        	</tr>
+	        </tbody>
+	    </table>
+    </form>
+	<form action="" method="post" method="ibiz">
+		<table>
+	        <tbody style="">
+	        	<tr><td><label for="cache">Cache Instance?:</label></td><td><input id="cache" type="text" value="false" size="100"></td></tr>
+	        	<tr><td><label for="ibiz">IBiz:</label></td><td><input id="ibiz" type="text" value="com.netcrest.pado.biz.IGridMapBiz(string)" size="100"></td></tr>
+	            <tr><td><label for="method">Method:</label></td><td><input id="method" type="text" value="get(string)" size="100" ></td></tr>
+	            <tr><td><label for="cargs">Constructor Arguments:</label></td><td><input id="cargs" type = "text" value="test" size="100"></td></tr>
+	            <tr><td><label for="args">Method Arguments:</label></td><td><input id="args" type = "text" value="key1" size="100">
+	            </td><td> <input type="button" NAME="button" Value="Invoke" onClick="invoke(this.form)"></td></tr>
+	           
+	        </tbody>
+	    </table>
+	    <br></br>
+	    <label for="value">RESTful:  </label><input type="button" NAME="button" Value="Clear Results" onClick="clearResults(this.form)"></input>
+	    <br></br>
+	    <textarea id="rest" readonly="readonly" rows="2" cols="100">
+	    </textarea>
+	    <br></br>
+	    <label for="value">Returned Value:</label>
+	    <br></br>
+	    <textarea id="value" readonly="readonly" rows="10" cols="100">
+	    </textarea>
+	</form>
+	<br></br>
+	Pado-web exposes IBiz classes in the form of a RESTful API such that they can be instantiated and invoked via HTTP.
+	To invoke an IBiz method, the following JSON fields must be posted (See <a href="doc/api/index.html" target="pado-api">Pado-web API</a>):
+	<ul>
+	<li>token - The session token obtained from the login.</li>
+	<li>cache - true to cache the object for the login session, or else to create the object per request.</li>
+	<li>ibiz - Fully-qualified IBiz class name along with optional argument types.</li>
+	<li>method - Method name along with optional argument types.</li>
+	<li>cargs - Comma-separated constructor arguments or a JSON object.</li>
+	<li>args - Comma-separated method arguments or a JSON object.</li>
+	</ul>
+</body>
+</html>
